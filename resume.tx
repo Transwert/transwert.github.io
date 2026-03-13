@@ -1,0 +1,124 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[5pt,a4paper,sans]{moderncv} % Font sizes: 10, 11, or 12; paper sizes: a4paper, letterpaper, a5paper, legalpaper, executivepaper or landscape; font families: sans or roman
+
+\moderncvstyle{classic} % CV theme - options include: 'casual' (default), 'classic', 'oldstyle' and 'banking'
+\moderncvcolor{blue} % CV color - options include: 'blue' (default), 'orange', 'green', 'red', 'purple', 'grey' and 'black'
+
+\usepackage{lipsum} % Used for inserting dummy 'Lorem ipsum' text into the template
+\usepackage{fontawesome}
+\usepackage[scale=.95]{geometry} % Reduce document margins
+%\setlength{\hintscolumnwidth}{3cm} % Uncomment to change the width of the dates column
+%\setlength{\makecvtitlenamewidth}{10cm} % For the 'classic' style, uncomment to adjust the width of the space allocated to your name
+
+%----------------------------------------------------------------------------------------
+%	NAME AND CONTACT INFORMATION SECTION
+%----------------------------------------------------------------------------------------
+\usepackage{tikz}
+
+\usepackage{mathptmx}
+\usepackage[11pt]{moresize}
+\firstname{Apoorve} % Your first name
+\familyname{Kalot}% Your last name
+
+% All information in this block is optional, comment out any lines you don't need
+
+% \address{1-B, Behind Onkareshwar Mandir, A-Block, Chandravardai}{ nagar, beawar road, ajmer, rajasthan India}
+\mobile{+91-8949437977}
+\email{apoorve.kalot.ep17.iith@gmail.com}
+\extrainfo{
+  \httplink{https://www.linkedin.com/in/apoorve-kal0t/} \\
+  \httplink{https://github.com/Transwert}
+}
+
+\begin{document}
+\makecvtitle 
+
+%----------------------------------------------------------------------------------------
+%	EDUCATION SECTION
+%----------------------------------------------------------------------------------------
+\vspace{-40pt}
+\section{Education}
+
+\cventry{2017--2021}{Bachelor of Technology in Engineering physics, with minor in Entrepreneurship}{}{}{}{Indian Institute of Technology (IIT), Hyderabad \\
+CGPA (Engineering Physics) - 7.56, CGPA (Entrepreneurship) - 8.75}  % Arguments not required can be left empty
+
+
+%----------------------------------------------------------------------------------------
+%	Masters SECTION
+%----------------------------------------------------------------------------------------
+% \vspace{-10pt}
+\section{Work Experience}
+
+\cvitem{\textbf{Company}}{Tailored AI - SDE 3 | Nov 2025 – Current | Bangalore }
+% \cvitem{\textbf{Location}}{Jan 2025 – Current | Bangalore, India}
+\cvitem{\textbf{Description}}{
+\begin{itemize}
+\item Developed a \textbf{ReAG+RAG} based application for generating Investment Committee Note involving multi-model input as context with Advance feature Engineering, scaling for 1000+ users. 
+\item Leading a team to Develop a \textbf{Natural Language to SQL} based Chatbot, for internal Sales Data with RAG based context setting, achieving \textbf{92\%} Accuracy over Eval dataset.
+\item \textbf{Tech-Stack:} AWS (S3, AKS), Azure (Azure Document Intelligence, Azure OpenAI (GPT-4o, GPT-5)), Python (FastAPI), Qdrant
+\end{itemize}
+}
+\vspace{-10pt}
+% \cvitem{\textbf{Company}}{Vituity - ML Engineer | Jan 2025 – June 2025 | Bangalore (Remote) }
+\cvitem{\textbf{Company}}{Regeneron - ML/MLOps Engineer | Sept 2023 – June 2025 | Bangalore (Remote)}
+% \cvitem{\textbf{Location}}{Jan 2025 – Current | Bangalore, India}
+\cvitem{\textbf{Description}}{
+\begin{itemize}
+\item Developed a \textbf{Role-Based Access Control (RBAC)} enabled Retrieval-Augmented Generation (RAG) pipeline to provide a centralized knowledge base for 150+ U.S. hospital providers.
+\item Pioneered a \textbf{Natural Language to SQL} interface, increasing adoption of internal SQL queries by \textbf{10\%}.
+\item Designed and deployed \textbf{RAG pipelines} using the \textbf{Mistral-7B} model, \textbf{Sentence Transformer} package and \textbf{AWS (EC2, S3, EKS)} based services.
+\item Optimized back-end architecture utilizing \textbf{DataIKU LLM Mesh}, managed \textbf{Milvus Vector-DB} and \textbf{GPT-3.5}, improving the stability of RAG pipelines for internal services by \textbf{20\%} for 500+ users.
+\item Built and deployed an \textbf{AI Governance} framework that enforced RBAC-based compliance on internal data and models, supporting 75+ AI use cases.
+\item \textbf{Tech-Stack:} Azure (Azure Document Intelligence, AI search, CosmosDB, Azure OpenAI (GPT-4o)), Python (Flask Blueprints, FastAPI)
+\end{itemize}
+}
+
+\vspace{-10pt}
+\cvitem{\textbf{Company}}{Saarthi.ai - MLOps Engineer | Jun 2021 – Aug 2023 | Bangalore}
+% \cvitem{\textbf{Location}}{ Aug 2022 – Aug 2023 | Bangalore, India}
+\cvitem{\textbf{Description}}{
+\begin{itemize}
+\item Developed \textbf{'Conversational SDK'} offering Speech-to-Text (STT) and Text-to-Speech (TTS) services in \textbf{11 Indian Languages}, leveraging \textbf{Python}, \textbf{Kubernetes}, \textbf{PostgreSQL}, \textbf{WebSockets}, \textbf{Prometheus, Grafana} and achieving a \textbf{20\% latency reduction}.
+\item Spearheaded a central \textbf{LLM server} using \textbf{Text-generation-Inference Engine} and Docker-swarm for internal automation utilizing \textbf{LangChain}.
+\item Implemented an end-to-end training pipeline for multiple \textbf{NLU} models using \textbf{MLFlow}, \textbf{Data Version Control (DVC)}, \textbf{Azure Blob storage}, and \textbf{GitHub Actions} which improved training efficiency by \textbf{30\%}.
+\item Configured \textbf{CI} for an Automatic Speech Recognition model repository using \textbf{Jenkins}, \textbf{SonarQube}, and \textbf{ACR}, Reduced build failures by \textbf{15\%}.  \item Utilized Nvidia's \textbf{Triton Inference Server} for staging model deployment with \textbf{TensorRT} and \textbf{OpenVINO} acceleration, achieving a \textbf{15ms latency drop}.
+\item Provided DevOps support and automated deployments using \textbf{Jenkins, SonarQube, Prometheus, Grafana, Loki, Python and Bash scripts} across \textbf{AWS} and \textbf{Azure} environments.
+\end{itemize}
+}
+
+\vspace{-10pt}
+%----------------------------------------------------------------------------------------
+%	Skills SECTION
+%----------------------------------------------------------------------------------------
+
+\section{Technical Skills}
+\renewcommand{\listitemsymbol}{-~}
+{\small
+% \cvitem{\textbf{Programming}}{ Python \textbullet{} \LaTeX}
+
+\cvitem{\textbf{Libraries}}{NumPy, Pandas, PyTorch, TensorFlow, Joblib, ONNX, Locust, OpenVINO, TensorRT, FastAPI, Flask Blueprints, LangChain }
+
+\cvitem{\textbf{Tools}}{
+\begin{itemize}
+\item \textbf{Version Control and Databases: } Git, DVC, PostgreSQL, Milvus Vector-DB
+\item \textbf{Azure: } Azure Blob-storage, Azure ML Studio, Azure Container Registry (ACR), Azure Kubernetes Service (AKS), Azure Document Intelligence, AI search, CosmosDB
+\item \textbf{AWS: }  Amazon Elastic Compute Cloud (EC2), Elastic Kubernetes Service (EKS), S3, Route 53, Elastic Container Registry (ECR)
+\item \textbf{ML Tools:}  Apache Airflow, Inference Server (Triton by Nvidia, Text-Generation-Inference by Hugging Face), MLFlow, DataIKU LLM Mesh 
+\item \textbf{DevOps Tools:} Docker, Kubernetes (Minikube), Prometheus, Grafana, Loki, Jenkins, SonarQube  
+\end{itemize}
+}
+\par}
+
+%----------------------------------------------------------------------------------------
+
+\end{document}
+
+
+

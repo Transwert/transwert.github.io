@@ -1,6 +1,7 @@
 import { rectsOverlap } from "./engine.js";
 
 export function createBossArena(bossData) {
+  const phaseMaxHealth = bossData.phases.map((_, idx) => 3 + idx);
   return {
     phase: 0,
     maxPhases: bossData.phases.length,
@@ -8,7 +9,9 @@ export function createBossArena(bossData) {
     y: 200,
     w: 78,
     h: 64,
-    health: 3,
+    health: phaseMaxHealth[0],
+    phaseMaxHealth,
+    currentPhaseMaxHealth: phaseMaxHealth[0],
     defeated: false,
     bossData,
     revealQueue: [],
@@ -64,6 +67,7 @@ export function updateBossArena({
       onBossDefeated();
       return;
     }
-    arena.health = 3 + arena.phase;
+    arena.currentPhaseMaxHealth = arena.phaseMaxHealth[arena.phase];
+    arena.health = arena.currentPhaseMaxHealth;
   }
 }

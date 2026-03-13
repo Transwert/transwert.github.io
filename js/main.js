@@ -26,6 +26,7 @@ import {
   hideCheatConsole,
   setCheatConsoleStatus,
   bindCheatSubmit,
+  showToastMessage,
   clearOverlay,
   onOverlayButton,
 } from "./ui.js";
@@ -117,6 +118,11 @@ function nextLevelOrBoss() {
 }
 
 function setupTitle() {
+  game.cheatActive = false;
+  game.cheatCommand = "";
+  game.cheatMessage = "";
+  if (game.player) game.player.isInvincible = false;
+  closeCheatConsole();
   game.state = "title";
   showTitleScreen(resumeData.profile);
   onOverlayButton("start-game-btn", startGame);
@@ -152,15 +158,22 @@ function handleCheatCommand(rawCommand) {
   game.cheatCommand = command;
 
   if (command === "escape") {
+    if (game.cheatActive) {
+      game.cheatActive = false;
+      game.cheatMessage = "Invincibility disabled.";
+      if (game.player) game.player.isInvincible = false;
+      closeCheatConsole();
+      showToastMessage("Invincibility disabled", 1800);
+      return;
+    }
     game.cheatActive = true;
     game.cheatMessage = "Invincibility ON. Touch enemies and boss to defeat.";
     if (game.player) game.player.isInvincible = true;
-  } else if (command === "off" || command === "normal") {
-    game.cheatActive = false;
-    game.cheatMessage = "Invincibility OFF.";
-    if (game.player) game.player.isInvincible = false;
+    closeCheatConsole();
+    showToastMessage("Invincibility enabled", 1800);
+    return;
   } else {
-    game.cheatMessage = `Unknown command: ${command || "(empty)"}`;
+    game.cheatMessage = "No cheat is available";
   }
   setCheatConsoleStatus(game.cheatMessage);
 }
@@ -323,11 +336,32 @@ function render() {
     { invincible: game.player.isInvincible, timeMs: performance.now() },
   );
 
+  const bossBarData =
+    game.bossArena && !game.bossArena.defeated
+      ? (() => {
+          const playerCenter = game.player.x + game.player.w * 0.5;
+          const bossCenter = game.bossArena.x + game.bossArena.w * 0.5;
+          const nearBoss = Math.abs(playerCenter - bossCenter) <= 300;
+          const showBossBar =
+            nearBoss && (game.state === "bossFight" || game.state === "popup");
+          return {
+            showBossBar,
+            activePhase: game.bossArena.phase,
+            maxPhases: game.bossArena.maxPhases,
+            currentPhaseHp: Math.max(0, game.bossArena.health),
+            currentPhaseMaxHp: game.bossArena.currentPhaseMaxHealth,
+            phaseMaxArray: game.bossArena.phaseMaxHealth,
+            phaseColors: ["#d44f4f", "#d98f36", "#4f8ae0", "#8d4fe0"],
+          };
+        })()
+      : null;
+
   drawHud(ctx, {
     worldLabel: game.worldLabel,
     coins: game.coins,
     experienceYears: game.experienceYears,
     lives: game.lives,
+    bossBar: bossBarData,
   });
 }
 

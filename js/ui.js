@@ -54,6 +54,34 @@ export function bindCheatSubmit(onSubmit) {
   };
 }
 
+export function showToastMessage(text, durationMs = 1600) {
+  const existing = document.getElementById("game-toast");
+  if (existing) existing.remove();
+
+  const toast = document.createElement("div");
+  toast.id = "game-toast";
+  toast.textContent = text;
+  toast.style.position = "fixed";
+  toast.style.top = "18px";
+  toast.style.left = "50%";
+  toast.style.transform = "translateX(-50%)";
+  toast.style.zIndex = "9999";
+  toast.style.padding = "10px 14px";
+  toast.style.border = "2px solid #b2dcff";
+  toast.style.borderRadius = "8px";
+  toast.style.background = "#0a1326f0";
+  toast.style.color = "#ffffff";
+  toast.style.fontFamily = "\"Press Start 2P\", monospace";
+  toast.style.fontSize = "10px";
+  toast.style.pointerEvents = "none";
+  toast.style.boxShadow = "0 0 0 2px #00000055";
+  document.body.appendChild(toast);
+
+  window.setTimeout(() => {
+    toast.remove();
+  }, durationMs);
+}
+
 export function drawHud(ctx, game) {
   ctx.fillStyle = "#111111aa";
   ctx.fillRect(0, 0, 800, 44);
@@ -63,6 +91,60 @@ export function drawHud(ctx, game) {
   ctx.fillText(`COINS ${String(game.coins).padStart(2, "0")}`, 250, 28);
   ctx.fillText(`EXP ${game.experienceYears}`, 470, 28);
   ctx.fillText(`LIVES ${game.lives}`, 670, 28);
+
+  drawBossPhaseBar(ctx, game.bossBar);
+}
+
+function drawBossPhaseBar(ctx, bossBar) {
+  if (!bossBar || !bossBar.showBossBar) return;
+
+  const x = 170;
+  const y = 46;
+  const width = 460;
+  const height = 14;
+  const border = 2;
+  const segmentCount = bossBar.maxPhases;
+  const segmentW = (width - border * 2) / segmentCount;
+
+  ctx.fillStyle = "#090d1dcc";
+  ctx.fillRect(x, y, width, height);
+  ctx.strokeStyle = "#e6f2ff";
+  ctx.lineWidth = border;
+  ctx.strokeRect(x, y, width, height);
+
+  for (let i = 0; i < segmentCount; i += 1) {
+    const sx = x + border + i * segmentW;
+    const sy = y + border;
+    const sw = segmentW;
+    const sh = height - border * 2;
+    const color = bossBar.phaseColors?.[i] || "#7bb7ff";
+
+    // Faint background tint keeps segments visually connected but identifiable.
+    ctx.fillStyle = `${color}33`;
+    ctx.fillRect(sx, sy, sw, sh);
+
+    let fillRatio = 1;
+    if (i < bossBar.activePhase) {
+      fillRatio = 0;
+    } else if (i === bossBar.activePhase) {
+      fillRatio = Math.max(
+        0,
+        Math.min(1, bossBar.currentPhaseHp / Math.max(1, bossBar.currentPhaseMaxHp)),
+      );
+    }
+
+    ctx.fillStyle = color;
+    ctx.fillRect(sx, sy, sw * fillRatio, sh);
+
+    if (i > 0) {
+      ctx.fillStyle = "#ffffff22";
+      ctx.fillRect(sx, sy, 1, sh);
+    }
+  }
+
+  ctx.fillStyle = "#e8f4ff";
+  ctx.font = "8px 'Press Start 2P', monospace";
+  ctx.fillText("BOSS PHASE HP", x + 4, y - 4);
 }
 
 export function showTitleScreen(profile) {
