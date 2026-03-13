@@ -72,7 +72,7 @@ export function showVictory(profile) {
       <p>${profile.contact.phone}</p>
       <p><a href="${profile.contact.linkedin}" target="_blank" rel="noopener noreferrer">LinkedIn</a></p>
       <p><a href="${profile.contact.github}" target="_blank" rel="noopener noreferrer">GitHub</a></p>
-      <p><a href="./resume.pdf" target="_blank" rel="noopener noreferrer">Download PDF Resume</a></p>
+      <p><a href="./Apoorve_IITH_Resume_Updated_2025_26.pdf" download="Apoorve_IITH_Resume_Updated_2025_26.pdf">Resume!</a></p>
       <button id="restart-btn">Replay</button>
     </div>
   `);
