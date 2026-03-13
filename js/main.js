@@ -200,6 +200,11 @@ const game = {
   cheatActive: false,
   cheatCommand: "",
   cheatMessage: "",
+  totalEnemies: 0,
+  defeatedEnemies: 0,
+  totalCoinsTarget: 0,
+  deathCount: 0,
+  perfectToastShown: false,
 };
 
 const START_LOADING_MS = 8500;
@@ -215,6 +220,17 @@ const titleUi = {
   loadingTimeoutId: null,
   tipTimeoutId: null,
 };
+
+function calculateRunTargets(levels) {
+  return levels.reduce(
+    (acc, level) => {
+      acc.totalEnemies += level.enemies.length;
+      acc.totalCoins += level.coins.length;
+      return acc;
+    },
+    { totalEnemies: 0, totalCoins: 0 },
+  );
+}
 
 function clearTitleUiTimers() {
   if (titleUi.loadingIntervalId) {
@@ -263,6 +279,14 @@ function loadLevel(index) {
 
 function startGame() {
   unlockAudio();
+  const runTargets = calculateRunTargets(allLevels);
+  game.totalEnemies = runTargets.totalEnemies;
+  game.totalCoinsTarget = runTargets.totalCoins;
+  game.defeatedEnemies = 0;
+  game.deathCount = 0;
+  game.perfectToastShown = false;
+  game.coins = 0;
+  game.lives = 3;
   loadLevel(0);
   playBgm("level1");
   game.state = "levelIntro";
@@ -327,6 +351,11 @@ function setupTitle() {
   if (game.player) game.player.isInvincible = false;
   closeCheatConsole();
   game.state = "title";
+  game.totalEnemies = 0;
+  game.defeatedEnemies = 0;
+  game.totalCoinsTarget = 0;
+  game.deathCount = 0;
+  game.perfectToastShown = false;
   playBgm("title");
   tryImmediatePlay("title");
   showTitleScreen(resumeData.profile);
@@ -410,6 +439,7 @@ function restartFromCurrentStage() {
 }
 
 function onPlayerHit() {
+  game.deathCount += 1;
   game.lives -= 1;
   game.player.x = 64;
   game.player.y = 350;
@@ -470,6 +500,7 @@ function update(dt) {
       enemies: game.level.enemies,
       fireballs: game.fireballs,
       onEnemyDefeated: (project) => {
+        game.defeatedEnemies += 1;
         game.state = "popup";
         showProjectPopup(project);
         onOverlayButton("close-popup-btn", () => {
@@ -507,6 +538,17 @@ function update(dt) {
           if (game.bossArena.defeated) {
             playBgm("victory");
             showVictory(resumeData.profile);
+            const isPerfectRun =
+              game.deathCount === 0 &&
+              game.defeatedEnemies >= game.totalEnemies &&
+              game.coins >= game.totalCoinsTarget;
+            if (isPerfectRun && !game.perfectToastShown) {
+              game.perfectToastShown = true;
+              showToastMessage(
+                'Congratulation for not dying single time and killing all your foes, message from developer: "TOUCH GRASS" ',
+                4200,
+              );
+            }
             onOverlayButton("restart-btn", () => {
               unlockAudio();
               game.coins = 0;

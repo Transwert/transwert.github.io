@@ -1,6 +1,6 @@
 # Super Apoorve Bros - Interactive Resume
 
-A Mario-style interactive resume built with pure HTML5 Canvas and vanilla JavaScript.  
+A Mario-style (Elden Ring Audio theme based) interactive Resume built with pure HTML5 Canvas and vanilla JavaScript.  
 No heavy libraries, no build step, fully static and GitHub Pages friendly.
 
 ## Features
@@ -11,9 +11,27 @@ No heavy libraries, no build step, fully static and GitHub Pages friendly.
   - Tailored AI
 - Project enemies reveal project details when defeated
 - Tech-stack collectibles as coins
-- Final boss level for Technical Skills (multi-phase)
-- Victory screen with contact details and links
-- Keyboard and mobile touch controls
+- Checkpoint-like continue behavior:
+  - If lives reach zero, player resumes from the same stage (level or boss)
+- Final boss level for Technical Skills:
+  - multi-phase boss health bar
+  - harder phase mechanics with movement and projectile patterns
+- Cheat console (`~`) with command `escape`:
+  - toggles invincibility on/off
+  - rainbow player glow while active
+  - touch-to-defeat for enemies and boss phases
+- Audio system:
+  - per-screen/level looping BGM
+  - `SND ON/SND OFF` toggle with `localStorage` persistence
+  - autoplay-safe fallback behavior + startup tip toast
+- UX polish:
+  - `Enter` works for Start/Continue and popup close
+  - title screen controls guide
+  - title start button loading animation
+- Victory screen:
+  - contact details and links
+  - resume download link
+  - special perfect-run toast if player defeats all enemies, collects all coins, and never dies
 
 ## Local Run
 
@@ -31,8 +49,10 @@ Then open:
 
 - Move: `Arrow Left/Right` or `A/D`
 - Jump: `Arrow Up` or `W`
-- Shoot: `Space`
-- Start/Continue: `Enter`
+- Attack/Shoot: `Space`
+- Start/Continue/Close popup: `Enter`
+- Cheat console: `~`, then type `escape` and press `Enter`
+- Toggle audio: click `SND ON` / `SND OFF`
 - Mobile: on-screen touch buttons
 
 ## Project Structure
