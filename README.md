@@ -33,6 +33,20 @@ No heavy libraries, no build step, fully static and GitHub Pages friendly.
   - resume download link
   - special perfect-run toast if player defeats all enemies, collects all coins, and never dies
 
+## Playthrough
+
+**Company levels gameplay (projects + collectibles):**
+
+![Levels Gameplay](playthrough/gif/playthrough-levels.gif)
+
+**Final boss gameplay (multi-phase fight):**
+
+![Boss Gameplay](playthrough/gif/playthrough-boss.gif)
+
+**In-game snapshot:**
+
+![Gameplay Screenshot](playthrough/images/gameplay-screenshot.png)
+
 ## Local Run
 
 Because this uses ES modules, run from a local web server:
