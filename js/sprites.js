@@ -163,6 +163,15 @@ export function drawFireball(ctx, fireball, cameraX) {
   ctx.fillRect(x + 2, fireball.y + 2, fireball.w - 4, fireball.h - 4);
 }
 
+export function drawBossProjectile(ctx, proj, cameraX) {
+  const x = proj.x - cameraX;
+  const isVertical = proj.vy !== 0 && proj.vx === 0;
+  ctx.fillStyle = isVertical ? "#ff4466" : "#ff8833";
+  ctx.fillRect(x, proj.y, proj.w, proj.h);
+  ctx.fillStyle = "#ffee88";
+  ctx.fillRect(x + 2, proj.y + 2, Math.max(0, proj.w - 4), Math.max(0, proj.h - 4));
+}
+
 export function drawFlag(ctx, flag, cameraX) {
   const x = flag.x - cameraX;
   ctx.fillStyle = "#ececec";

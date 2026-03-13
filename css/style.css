@@ -52,7 +52,7 @@ body {
 
 .audio-toggle-btn {
   position: absolute;
-  top: 12px;
+  top: 56px;
   right: 12px;
   z-index: 70;
   border: 2px solid #b7dcff;
@@ -148,6 +148,32 @@ body {
   background: #4a68a6;
 }
 
+.controls-guide {
+  margin-top: 12px;
+  border: 1px solid #7ea8df;
+  border-radius: 8px;
+  padding: 8px 10px;
+  background: #0a1324c7;
+}
+
+.controls-guide .ctrl-row {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 8px;
+  align-items: start;
+  font-size: 8px;
+  color: #d5e9ff;
+  line-height: 1.5;
+}
+
+.controls-guide .ctrl-row + .ctrl-row {
+  margin-top: 4px;
+}
+
+.controls-guide .ctrl-key {
+  color: #9fc8ff;
+}
+
 .tags {
   display: flex;
   flex-wrap: wrap;
@@ -190,9 +216,10 @@ body {
   background: #fefefe3a;
 }
 
-@media (max-width: 900px), (pointer: coarse) {
+@media (max-width: 900px),
+(pointer: coarse) {
   .audio-toggle-btn {
-    top: 10px;
+    top: 52px;
     right: 10px;
     font-size: 8px;
     padding: 7px 9px;

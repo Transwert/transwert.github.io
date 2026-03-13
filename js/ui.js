@@ -155,6 +155,13 @@ export function showTitleScreen(profile) {
       <p>${profile.education.degree}</p>
       <p>${profile.education.institute}</p>
       <button id="start-game-btn">Press Start</button>
+      <div class="controls-guide" aria-label="controls guide">
+        <div class="ctrl-row"><span class="ctrl-key">MOVE</span><span>Arrow Left/Right or A/D</span></div>
+        <div class="ctrl-row"><span class="ctrl-key">JUMP</span><span>Arrow Up or W</span></div>
+        <div class="ctrl-row"><span class="ctrl-key">ATTACK</span><span>Space</span></div>
+        <div class="ctrl-row"><span class="ctrl-key">CLOSE POPUP</span><span>Enter</span></div>
+        <div class="ctrl-row"><span class="ctrl-key">CHEAT</span><span>~ then type escape</span></div>
+      </div>
     </div>
   `);
 }

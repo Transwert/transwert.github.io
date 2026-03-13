@@ -10,6 +10,7 @@ import {
   drawFireball,
   drawFlag,
   drawBoss,
+  drawBossProjectile,
 } from "./sprites.js";
 import { createPlayer, updatePlayer, updateFireballs } from "./player.js";
 import { updateEnemies, handleEnemyInteractions } from "./enemies.js";
@@ -78,8 +79,8 @@ function playBgm(trackKey) {
   if (!source) return;
   audioState.pendingTrack = trackKey;
 
-  if (!audioState.unlocked) return;
   if (audioState.muted) return;
+  bgmPlayer.muted = false;
   if (audioState.currentTrack === trackKey && !bgmPlayer.paused) return;
 
   bgmPlayer.pause();
@@ -87,10 +88,49 @@ function playBgm(trackKey) {
   bgmPlayer.src = source;
   audioState.currentTrack = trackKey;
   const playAttempt = bgmPlayer.play();
+  if (playAttempt && typeof playAttempt.then === "function") {
+    playAttempt
+      .then(() => {
+        audioState.unlocked = true;
+      })
+      .catch(() => {
+        // Retry after next user gesture if browser blocks autoplay.
+        audioState.unlocked = false;
+        // Try muted bootstrap autoplay (allowed in more browsers),
+        // then restore audible playback once unlocked/allowed.
+        bgmPlayer.muted = true;
+        const mutedAttempt = bgmPlayer.play();
+        if (mutedAttempt && typeof mutedAttempt.then === "function") {
+          mutedAttempt
+            .then(() => {
+              if (audioState.unlocked && !audioState.muted) {
+                bgmPlayer.muted = false;
+              }
+            })
+            .catch(() => {
+              // Keep waiting for user gesture.
+            });
+        }
+      });
+  }
+}
+
+function tryImmediatePlay(trackKey) {
+  const source = BGM_TRACKS[trackKey];
+  if (!source || audioState.muted) return;
+
+  audioState.pendingTrack = trackKey;
+  if (audioState.currentTrack !== trackKey) {
+    bgmPlayer.pause();
+    bgmPlayer.currentTime = 0;
+    bgmPlayer.src = source;
+    audioState.currentTrack = trackKey;
+  }
+
+  const playAttempt = bgmPlayer.play();
   if (playAttempt && typeof playAttempt.catch === "function") {
     playAttempt.catch(() => {
-      // Retry after next user gesture if browser blocks autoplay.
-      audioState.unlocked = false;
+      // Browser may block autoplay; regular unlock flow will retry later.
     });
   }
 }
@@ -98,7 +138,9 @@ function playBgm(trackKey) {
 function unlockAudio() {
   if (audioState.unlocked) return;
   audioState.unlocked = true;
+  bgmPlayer.muted = !!audioState.muted;
   if (audioState.pendingTrack && !audioState.muted) {
+    bgmPlayer.muted = false;
     playBgm(audioState.pendingTrack);
   }
 }
@@ -118,6 +160,7 @@ function toggleMuteState() {
   audioState.muted = !audioState.muted;
   writeMutedPreference(audioState.muted);
   renderAudioToggleState();
+  bgmPlayer.muted = !!audioState.muted;
 
   if (audioState.muted) {
     bgmPlayer.pause();
@@ -234,6 +277,7 @@ function setupTitle() {
   closeCheatConsole();
   game.state = "title";
   playBgm("title");
+  tryImmediatePlay("title");
   showTitleScreen(resumeData.profile);
   onOverlayButton("start-game-btn", () => {
     unlockAudio();
@@ -337,6 +381,14 @@ function update(dt) {
     return;
   }
   if (game.state === "levelIntro" || game.state === "bossIntro" || game.state === "popup" || game.state === "victory") {
+    if ((game.state === "levelIntro" || game.state === "bossIntro") && input.consumeStart()) {
+      const continueBtn = document.getElementById("continue-btn");
+      if (continueBtn) continueBtn.click();
+    }
+    if (game.state === "popup" && input.consumeStart()) {
+      const closeBtn = document.getElementById("close-popup-btn");
+      if (closeBtn) closeBtn.click();
+    }
     if (game.state === "victory" && input.consumeStart()) {
       game.coins = 0;
       game.lives = 3;
@@ -408,7 +460,9 @@ function update(dt) {
           }
         });
       },
-      onBossDefeated: () => {},
+      onBossDefeated: () => { },
+      onPlayerHit,
+      dt,
       now,
     });
   }
@@ -437,6 +491,11 @@ function render() {
   }
   if (game.state === "bossFight" || game.state === "popup") {
     if (game.bossArena && !game.bossArena.defeated) drawBoss(ctx, game.bossArena, game.camera.x);
+    if (game.bossArena) {
+      for (const proj of game.bossArena.projectiles) {
+        drawBossProjectile(ctx, proj, game.camera.x);
+      }
+    }
   }
   for (const fireball of game.fireballs) {
     drawFireball(ctx, fireball, game.camera.x);
@@ -454,21 +513,21 @@ function render() {
   const bossBarData =
     game.bossArena && !game.bossArena.defeated
       ? (() => {
-          const playerCenter = game.player.x + game.player.w * 0.5;
-          const bossCenter = game.bossArena.x + game.bossArena.w * 0.5;
-          const nearBoss = Math.abs(playerCenter - bossCenter) <= 300;
-          const showBossBar =
-            nearBoss && (game.state === "bossFight" || game.state === "popup");
-          return {
-            showBossBar,
-            activePhase: game.bossArena.phase,
-            maxPhases: game.bossArena.maxPhases,
-            currentPhaseHp: Math.max(0, game.bossArena.health),
-            currentPhaseMaxHp: game.bossArena.currentPhaseMaxHealth,
-            phaseMaxArray: game.bossArena.phaseMaxHealth,
-            phaseColors: ["#d44f4f", "#d98f36", "#4f8ae0", "#8d4fe0"],
-          };
-        })()
+        const playerCenter = game.player.x + game.player.w * 0.5;
+        const bossCenter = game.bossArena.x + game.bossArena.w * 0.5;
+        const nearBoss = Math.abs(playerCenter - bossCenter) <= 300;
+        const showBossBar =
+          nearBoss && (game.state === "bossFight" || game.state === "popup");
+        return {
+          showBossBar,
+          activePhase: game.bossArena.phase,
+          maxPhases: game.bossArena.maxPhases,
+          currentPhaseHp: Math.max(0, game.bossArena.health),
+          currentPhaseMaxHp: game.bossArena.currentPhaseMaxHealth,
+          phaseMaxArray: game.bossArena.phaseMaxHealth,
+          phaseColors: ["#d44f4f", "#d98f36", "#4f8ae0", "#8d4fe0"],
+        };
+      })()
       : null;
 
   drawHud(ctx, {
