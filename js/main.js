@@ -112,6 +112,24 @@ function setupTitle() {
   onOverlayButton("start-game-btn", startGame);
 }
 
+function restartFromCurrentStage() {
+  game.lives = 3;
+  game.fireballs = [];
+
+  if (game.worldLabel === "BOSS" || game.state === "bossFight" || game.state === "bossIntro") {
+    startBoss();
+    return;
+  }
+
+  loadLevel(game.levelIndex);
+  game.state = "levelIntro";
+  showLevelIntro(game.level);
+  onOverlayButton("continue-btn", () => {
+    clearOverlay();
+    game.state = "playing";
+  });
+}
+
 function onPlayerHit() {
   game.lives -= 1;
   game.player.x = 64;
@@ -119,9 +137,7 @@ function onPlayerHit() {
   game.player.vx = 0;
   game.player.vy = 0;
   if (game.lives <= 0) {
-    game.lives = 3;
-    game.coins = 0;
-    setupTitle();
+    restartFromCurrentStage();
   }
 }
 
