@@ -1,0 +1,131 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  font-family: "Press Start 2P", monospace;
+  background: radial-gradient(circle at center, #253f70, #121427 70%);
+  color: #ffffff;
+}
+
+.game-shell {
+  position: relative;
+  width: min(96vw, 1000px);
+}
+
+#game-canvas {
+  width: 100%;
+  height: auto;
+  border: 4px solid #ffffff33;
+  border-radius: 12px;
+  background: #000;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+.overlay-panel {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  padding: 20px;
+}
+
+.panel {
+  pointer-events: auto;
+  width: min(700px, 90%);
+  max-height: 84%;
+  overflow: auto;
+  background: #101322f2;
+  border: 3px solid #6fa3ff;
+  border-radius: 10px;
+  padding: 16px;
+  line-height: 1.5;
+}
+
+.panel h1,
+.panel h2,
+.panel h3 {
+  margin-top: 0;
+}
+
+.panel p,
+.panel li,
+.panel a,
+.panel button {
+  font-size: 11px;
+}
+
+.panel button {
+  margin-top: 12px;
+  border: 2px solid #fff;
+  background: #2f4676;
+  color: #fff;
+  padding: 10px 12px;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.panel button:hover {
+  background: #4a68a6;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.tag {
+  border: 1px solid #9fd0ff;
+  color: #d9f0ff;
+  padding: 4px 6px;
+  font-size: 9px;
+}
+
+.mobile-controls {
+  margin-top: 10px;
+  display: none;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.control-group {
+  display: flex;
+  gap: 8px;
+}
+
+.touch-btn {
+  font-family: inherit;
+  border: none;
+  border-radius: 10px;
+  background: #fefefe22;
+  color: #fff;
+  padding: 10px 12px;
+  min-width: 54px;
+  min-height: 44px;
+}
+
+.touch-btn:active {
+  transform: translateY(1px);
+  background: #fefefe3a;
+}
+
+@media (max-width: 900px), (pointer: coarse) {
+  .mobile-controls {
+    display: flex;
+  }
+
+  .panel p,
+  .panel li,
+  .panel a,
+  .panel button {
+    font-size: 10px;
+  }
+}

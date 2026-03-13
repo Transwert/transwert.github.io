@@ -1,0 +1,280 @@
+export const resumeData = {
+  profile: {
+    firstName: "Apoorve",
+    lastName: "Kalot",
+    title: "ML/MLOps Engineer and SDE",
+    education: {
+      institute: "Indian Institute of Technology (IIT), Hyderabad",
+      degree:
+        "Bachelor of Technology in Engineering Physics, with minor in Entrepreneurship",
+      years: "2017-2021",
+      cgpaMajor: "7.56",
+      cgpaMinor: "8.75",
+    },
+    contact: {
+      phone: "+91-8949437977",
+      email: "apoorve.kalot.ep17.iith@gmail.com",
+      linkedin: "https://www.linkedin.com/in/apoorve-kal0t/",
+      github: "https://github.com/Transwert",
+    },
+  },
+  levels: [
+    {
+      id: "saarthi",
+      world: "1-1",
+      company: "Saarthi.ai",
+      role: "MLOps Engineer",
+      period: "Jun 2021 - Aug 2023",
+      theme: {
+        name: "factory",
+        sky: "#b5d2b8",
+        hill: "#5d8464",
+        ground: "#445a3a",
+        accent: "#d7a94a",
+      },
+      projects: [
+        {
+          id: "saarthi-sdk",
+          name: "Conversational SDK",
+          impact:
+            "Delivered STT/TTS in 11 Indian languages with ~20% latency reduction.",
+          details: [
+            "Built production Conversational SDK for speech services.",
+            "Integrated Python services with Kubernetes and PostgreSQL.",
+            "Used WebSockets and observability with Prometheus and Grafana.",
+          ],
+          tech: ["Python", "Kubernetes", "PostgreSQL", "WebSockets", "Prometheus", "Grafana"],
+        },
+        {
+          id: "saarthi-llm-server",
+          name: "Central LLM Server",
+          impact: "Enabled internal automation with shared LLM infrastructure.",
+          details: [
+            "Set up text-generation-inference server for reusable model APIs.",
+            "Orchestrated deployment with Docker Swarm.",
+            "Integrated with LangChain-based internal workflows.",
+          ],
+          tech: ["TGI", "Docker Swarm", "LangChain"],
+        },
+        {
+          id: "saarthi-nlu-pipeline",
+          name: "NLU Training Pipeline",
+          impact: "Improved model training efficiency by ~30%.",
+          details: [
+            "Implemented end-to-end pipeline for multiple NLU models.",
+            "Used MLflow, DVC, Azure Blob Storage, and GitHub Actions.",
+            "Standardized experiments and model versioning.",
+          ],
+          tech: ["MLflow", "DVC", "Azure Blob Storage", "GitHub Actions"],
+        },
+        {
+          id: "saarthi-asr-ci",
+          name: "ASR CI Pipeline",
+          impact: "Reduced build failures by ~15%.",
+          details: [
+            "Configured CI for ASR model repository.",
+            "Added quality gates with SonarQube and registry integration via ACR.",
+            "Automated build and validation flows.",
+          ],
+          tech: ["Jenkins", "SonarQube", "ACR"],
+        },
+        {
+          id: "saarthi-triton",
+          name: "Triton Staging Deployment",
+          impact: "Achieved ~15ms latency drop in inference.",
+          details: [
+            "Used NVIDIA Triton Inference Server for model serving.",
+            "Applied TensorRT and OpenVINO acceleration for staging deployments.",
+            "Validated lower latency under realistic load conditions.",
+          ],
+          tech: ["Triton", "TensorRT", "OpenVINO"],
+        },
+        {
+          id: "saarthi-devops",
+          name: "DevOps Automation",
+          impact: "Improved release reliability across AWS and Azure environments.",
+          details: [
+            "Automated deployments and operational workflows.",
+            "Maintained observability stack with Prometheus, Grafana, and Loki.",
+            "Built support scripts in Python and Bash for repeatable ops tasks.",
+          ],
+          tech: ["Jenkins", "Prometheus", "Grafana", "Loki", "AWS", "Azure", "Bash"],
+        },
+      ],
+      collectibles: [
+        "Python",
+        "Kubernetes",
+        "PostgreSQL",
+        "WebSockets",
+        "Prometheus",
+        "Grafana",
+      ],
+    },
+    {
+      id: "regeneron",
+      world: "2-1",
+      company: "Regeneron",
+      role: "ML/MLOps Engineer",
+      period: "Sept 2023 - Jun 2025",
+      theme: {
+        name: "medical-lab",
+        sky: "#b9d7e8",
+        hill: "#6aa4c0",
+        ground: "#456d7d",
+        accent: "#eff7fb",
+      },
+      projects: [
+        {
+          id: "regen-rbac-rag",
+          name: "RBAC RAG Pipeline",
+          impact: "Supported 150+ U.S. hospital providers with secure knowledge access.",
+          details: [
+            "Developed role-based retrieval-augmented generation pipeline.",
+            "Centralized enterprise knowledge and access boundaries.",
+            "Improved safety and user trust in clinical support contexts.",
+          ],
+          tech: ["RBAC", "RAG", "Azure", "Python"],
+        },
+        {
+          id: "regen-nl-sql",
+          name: "Natural Language to SQL",
+          impact: "Increased internal SQL query adoption by ~10%.",
+          details: [
+            "Pioneered NL-to-SQL interface for non-technical stakeholders.",
+            "Lowered friction to access internal data insights.",
+            "Integrated robust prompt and query processing.",
+          ],
+          tech: ["NL2SQL", "Python", "SQL"],
+        },
+        {
+          id: "regen-mistral-rag",
+          name: "Mistral-7B RAG Deployments",
+          impact: "Scaled practical RAG services for internal users.",
+          details: [
+            "Designed and deployed RAG pipelines with Mistral-7B.",
+            "Used sentence transformers and AWS services.",
+            "Focused on maintainability and cost-aware operations.",
+          ],
+          tech: ["Mistral-7B", "Sentence Transformers", "AWS EC2", "AWS S3", "AWS EKS"],
+        },
+        {
+          id: "regen-dataiku",
+          name: "DataIKU LLM Mesh Optimization",
+          impact: "Improved RAG stability by ~20% for 500+ users.",
+          details: [
+            "Optimized backend architecture around DataIKU LLM Mesh.",
+            "Managed Milvus Vector DB and GPT-3.5 based integrations.",
+            "Increased reliability under enterprise usage patterns.",
+          ],
+          tech: ["DataIKU LLM Mesh", "Milvus", "GPT-3.5"],
+        },
+        {
+          id: "regen-governance",
+          name: "AI Governance Framework",
+          impact: "Enabled RBAC-based compliance for 75+ AI use cases.",
+          details: [
+            "Built governance controls across data and model operations.",
+            "Applied policy-driven access enforcement and auditability.",
+            "Helped standardize internal AI compliance practices.",
+          ],
+          tech: ["AI Governance", "RBAC", "Compliance"],
+        },
+      ],
+      collectibles: [
+        "Azure Document Intelligence",
+        "Azure AI Search",
+        "CosmosDB",
+        "Flask",
+        "FastAPI",
+      ],
+    },
+    {
+      id: "tailored",
+      world: "3-1",
+      company: "Tailored AI",
+      role: "SDE 3",
+      period: "Nov 2025 - Current",
+      theme: {
+        name: "future-city",
+        sky: "#352f60",
+        hill: "#6657b5",
+        ground: "#2c2452",
+        accent: "#f4c95d",
+      },
+      projects: [
+        {
+          id: "tailored-icn",
+          name: "ReAG + RAG ICN Application",
+          impact: "Scaled to 1000+ users for investment committee note generation.",
+          details: [
+            "Developed multi-model context pipeline with advanced feature engineering.",
+            "Improved information synthesis for investment workflows.",
+            "Operated across AWS and Azure model services.",
+          ],
+          tech: ["AWS S3", "AKS", "Azure OpenAI GPT-4o", "Azure OpenAI GPT-5", "FastAPI", "Qdrant"],
+        },
+        {
+          id: "tailored-nl-sql",
+          name: "Internal Sales NL-to-SQL Chatbot",
+          impact: "Reached ~92% accuracy on eval datasets.",
+          details: [
+            "Leading development of NL-to-SQL assistant for sales data.",
+            "Combined RAG context setup with robust query interpretation.",
+            "Focused on high accuracy and operational reliability.",
+          ],
+          tech: ["RAG", "NL2SQL", "Python", "FastAPI"],
+        },
+      ],
+      collectibles: ["AWS S3", "AKS", "Azure OpenAI", "Qdrant", "FastAPI"],
+    },
+  ],
+  boss: {
+    name: "Technical Skills Titan",
+    phases: [
+      {
+        id: "libraries",
+        label: "Libraries Shield",
+        skills: ["NumPy", "Pandas", "PyTorch", "TensorFlow", "Joblib", "ONNX", "Locust", "OpenVINO", "TensorRT", "FastAPI", "Flask Blueprints", "LangChain"],
+      },
+      {
+        id: "cloud",
+        label: "Cloud Shield",
+        skills: [
+          "Azure Blob Storage",
+          "Azure ML Studio",
+          "Azure Container Registry",
+          "Azure Kubernetes Service",
+          "Azure Document Intelligence",
+          "Azure AI Search",
+          "CosmosDB",
+          "AWS EC2",
+          "AWS EKS",
+          "AWS S3",
+          "AWS Route53",
+          "AWS ECR",
+        ],
+      },
+      {
+        id: "ml-tools",
+        label: "ML Tools Shield",
+        skills: ["Apache Airflow", "Triton Inference Server", "Text-Generation-Inference", "MLflow", "DataIKU LLM Mesh"],
+      },
+      {
+        id: "devops",
+        label: "DevOps Shield",
+        skills: ["Docker", "Kubernetes", "Prometheus", "Grafana", "Loki", "Jenkins", "SonarQube", "Git", "DVC", "PostgreSQL", "Milvus"],
+      },
+    ],
+  },
+};
+
+export const gameConfig = {
+  width: 800,
+  height: 450,
+  tile: 16,
+  gravity: 1900,
+  playerSpeed: 180,
+  jumpVelocity: -560,
+  fireballSpeed: 320,
+  enemySpeed: 50,
+};

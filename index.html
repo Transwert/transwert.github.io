@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Super Apoorve Bros - Interactive Resume</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./css/style.css" />
+  </head>
+  <body>
+    <main class="game-shell">
+      <canvas id="game-canvas" width="800" height="450" aria-label="Interactive resume game"></canvas>
+      <section id="overlay-panel" class="overlay-panel" aria-live="polite"></section>
+      <section class="mobile-controls" aria-label="touch controls">
+        <div class="control-group move-group">
+          <button id="btn-left" class="touch-btn" type="button">◀</button>
+          <button id="btn-right" class="touch-btn" type="button">▶</button>
+        </div>
+        <div class="control-group action-group">
+          <button id="btn-jump" class="touch-btn" type="button">JUMP</button>
+          <button id="btn-shoot" class="touch-btn" type="button">FIRE</button>
+          <button id="btn-start" class="touch-btn" type="button">START</button>
+        </div>
+      </section>
+    </main>
+    <script type="module" src="./js/main.js"></script>
+  </body>
+</html>
