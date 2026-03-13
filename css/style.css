@@ -148,6 +148,25 @@ body {
   background: #4a68a6;
 }
 
+#start-game-btn.is-loading,
+#start-game-btn:disabled {
+  background: #26395f;
+  color: #d4e3ff;
+  opacity: 0.92;
+  cursor: wait;
+  animation: start-btn-pulse 900ms ease-in-out infinite;
+}
+
+@keyframes start-btn-pulse {
+  0%,
+  100% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.2);
+  }
+}
+
 .controls-guide {
   margin-top: 12px;
   border: 1px solid #7ea8df;

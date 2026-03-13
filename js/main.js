@@ -28,6 +28,7 @@ import {
   setCheatConsoleStatus,
   bindCheatSubmit,
   showToastMessage,
+  setStartButtonLoading,
   clearOverlay,
   onOverlayButton,
 } from "./ui.js";
@@ -201,6 +202,55 @@ const game = {
   cheatMessage: "",
 };
 
+const START_LOADING_MS = 8500;
+const START_LOADING_DOT_MS = 350;
+const START_AUDIO_TIP_DELAY_MS = 600;
+const START_AUDIO_TIP_DURATION_MS = 5400;
+const START_AUDIO_TIP_TEXT =
+  "TIP: incase you are not able to hear audio in start screen due to broswer, click on SND ON again and again to force start audio";
+
+const titleUi = {
+  startReady: false,
+  loadingIntervalId: null,
+  loadingTimeoutId: null,
+  tipTimeoutId: null,
+};
+
+function clearTitleUiTimers() {
+  if (titleUi.loadingIntervalId) {
+    window.clearInterval(titleUi.loadingIntervalId);
+    titleUi.loadingIntervalId = null;
+  }
+  if (titleUi.loadingTimeoutId) {
+    window.clearTimeout(titleUi.loadingTimeoutId);
+    titleUi.loadingTimeoutId = null;
+  }
+  if (titleUi.tipTimeoutId) {
+    window.clearTimeout(titleUi.tipTimeoutId);
+    titleUi.tipTimeoutId = null;
+  }
+}
+
+function startTitleLoadingSequence() {
+  titleUi.startReady = false;
+  let dotCount = 3;
+  setStartButtonLoading(true, "Loading...");
+
+  titleUi.loadingIntervalId = window.setInterval(() => {
+    dotCount = dotCount % 3 + 1;
+    setStartButtonLoading(true, `Loading${".".repeat(dotCount)}`);
+  }, START_LOADING_DOT_MS);
+
+  titleUi.loadingTimeoutId = window.setTimeout(() => {
+    if (titleUi.loadingIntervalId) {
+      window.clearInterval(titleUi.loadingIntervalId);
+      titleUi.loadingIntervalId = null;
+    }
+    titleUi.startReady = true;
+    setStartButtonLoading(false, "Press Start");
+  }, START_LOADING_MS);
+}
+
 function loadLevel(index) {
   game.levelIndex = index;
   game.level = structuredClone(allLevels[index]);
@@ -270,6 +320,7 @@ function nextLevelOrBoss() {
 }
 
 function setupTitle() {
+  clearTitleUiTimers();
   game.cheatActive = false;
   game.cheatCommand = "";
   game.cheatMessage = "";
@@ -279,7 +330,12 @@ function setupTitle() {
   playBgm("title");
   tryImmediatePlay("title");
   showTitleScreen(resumeData.profile);
+  startTitleLoadingSequence();
+  titleUi.tipTimeoutId = window.setTimeout(() => {
+    showToastMessage(START_AUDIO_TIP_TEXT, START_AUDIO_TIP_DURATION_MS);
+  }, START_AUDIO_TIP_DELAY_MS);
   onOverlayButton("start-game-btn", () => {
+    if (!titleUi.startReady) return;
     unlockAudio();
     startGame();
   });
@@ -377,7 +433,7 @@ function update(dt) {
   }
 
   if (game.state === "title") {
-    if (input.consumeStart()) startGame();
+    if (titleUi.startReady && input.consumeStart()) startGame();
     return;
   }
   if (game.state === "levelIntro" || game.state === "bossIntro" || game.state === "popup" || game.state === "victory") {

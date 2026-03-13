@@ -154,7 +154,7 @@ export function showTitleScreen(profile) {
       <p>${profile.firstName} ${profile.lastName}</p>
       <p>${profile.education.degree}</p>
       <p>${profile.education.institute}</p>
-      <button id="start-game-btn">Press Start</button>
+      <button id="start-game-btn" class="is-loading" disabled>Loading...</button>
       <div class="controls-guide" aria-label="controls guide">
         <div class="ctrl-row"><span class="ctrl-key">MOVE</span><span>Arrow Left/Right or A/D</span></div>
         <div class="ctrl-row"><span class="ctrl-key">JUMP</span><span>Arrow Up or W</span></div>
@@ -164,6 +164,20 @@ export function showTitleScreen(profile) {
       </div>
     </div>
   `);
+}
+
+export function setStartButtonLoading(isLoading, label = "Loading...") {
+  const button = document.getElementById("start-game-btn");
+  if (!button) return;
+  if (isLoading) {
+    button.disabled = true;
+    button.classList.add("is-loading");
+    button.textContent = label;
+    return;
+  }
+  button.disabled = false;
+  button.classList.remove("is-loading");
+  button.textContent = label || "Press Start";
 }
 
 export function showLevelIntro(level) {
