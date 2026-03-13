@@ -34,6 +34,109 @@ import {
 const canvas = document.getElementById("game-canvas");
 const ctx = canvas.getContext("2d");
 const input = new InputManager(canvas);
+const audioToggleBtn = document.getElementById("audio-toggle-btn");
+const AUDIO_PREF_KEY = "marioResumeMuted";
+
+const BGM_TRACKS = {
+  title: "audio/01. Elden Ring.mp3",
+  level1: "audio/44. Margit, the Fell Omen.mp3",
+  level2: "audio/54. Mohg, Lord of Blood.mp3",
+  level3: "audio/56. Malenia, Blade of Miquella.mp3",
+  boss: "audio/58. Starscourge Radahn.mp3",
+  victory: "audio/08. Roundtable Hold.mp3",
+};
+
+const bgmPlayer = new Audio();
+bgmPlayer.loop = true;
+bgmPlayer.preload = "auto";
+
+function readMutedPreference() {
+  try {
+    return localStorage.getItem(AUDIO_PREF_KEY) === "1";
+  } catch {
+    return false;
+  }
+}
+
+function writeMutedPreference(isMuted) {
+  try {
+    localStorage.setItem(AUDIO_PREF_KEY, isMuted ? "1" : "0");
+  } catch {
+    // Ignore storage issues and keep runtime behavior.
+  }
+}
+
+const audioState = {
+  unlocked: false,
+  currentTrack: null,
+  pendingTrack: null,
+  muted: readMutedPreference(),
+};
+
+function playBgm(trackKey) {
+  const source = BGM_TRACKS[trackKey];
+  if (!source) return;
+  audioState.pendingTrack = trackKey;
+
+  if (!audioState.unlocked) return;
+  if (audioState.muted) return;
+  if (audioState.currentTrack === trackKey && !bgmPlayer.paused) return;
+
+  bgmPlayer.pause();
+  bgmPlayer.currentTime = 0;
+  bgmPlayer.src = source;
+  audioState.currentTrack = trackKey;
+  const playAttempt = bgmPlayer.play();
+  if (playAttempt && typeof playAttempt.catch === "function") {
+    playAttempt.catch(() => {
+      // Retry after next user gesture if browser blocks autoplay.
+      audioState.unlocked = false;
+    });
+  }
+}
+
+function unlockAudio() {
+  if (audioState.unlocked) return;
+  audioState.unlocked = true;
+  if (audioState.pendingTrack && !audioState.muted) {
+    playBgm(audioState.pendingTrack);
+  }
+}
+
+window.addEventListener("pointerdown", unlockAudio, { once: false });
+window.addEventListener("keydown", unlockAudio, { once: false });
+
+function renderAudioToggleState() {
+  if (!audioToggleBtn) return;
+  const muted = audioState.muted;
+  audioToggleBtn.textContent = muted ? "SND OFF" : "SND ON";
+  audioToggleBtn.setAttribute("aria-label", muted ? "Unmute audio" : "Mute audio");
+  audioToggleBtn.classList.toggle("is-muted", muted);
+}
+
+function toggleMuteState() {
+  audioState.muted = !audioState.muted;
+  writeMutedPreference(audioState.muted);
+  renderAudioToggleState();
+
+  if (audioState.muted) {
+    bgmPlayer.pause();
+    showToastMessage("Audio muted", 1200);
+    return;
+  }
+  if (audioState.unlocked && audioState.pendingTrack) {
+    playBgm(audioState.pendingTrack);
+  }
+  showToastMessage("Audio unmuted", 1200);
+}
+
+if (audioToggleBtn) {
+  audioToggleBtn.addEventListener("click", () => {
+    unlockAudio();
+    toggleMuteState();
+  });
+}
+renderAudioToggleState();
 
 const allLevels = resumeData.levels.map((level, index) => createLevel(level, index));
 
@@ -66,7 +169,9 @@ function loadLevel(index) {
 }
 
 function startGame() {
+  unlockAudio();
   loadLevel(0);
+  playBgm("level1");
   game.state = "levelIntro";
   showLevelIntro(game.level);
   onOverlayButton("continue-btn", () => {
@@ -76,6 +181,7 @@ function startGame() {
 }
 
 function startBoss() {
+  playBgm("boss");
   game.state = "bossIntro";
   game.bossArena = createBossArena(resumeData.boss);
   game.level = {
@@ -105,7 +211,10 @@ function startBoss() {
 
 function nextLevelOrBoss() {
   if (game.levelIndex < allLevels.length - 1) {
-    loadLevel(game.levelIndex + 1);
+    const nextLevelIndex = game.levelIndex + 1;
+    loadLevel(nextLevelIndex);
+    if (nextLevelIndex === 1) playBgm("level2");
+    else if (nextLevelIndex === 2) playBgm("level3");
     game.state = "levelIntro";
     showLevelIntro(game.level);
     onOverlayButton("continue-btn", () => {
@@ -124,8 +233,12 @@ function setupTitle() {
   if (game.player) game.player.isInvincible = false;
   closeCheatConsole();
   game.state = "title";
+  playBgm("title");
   showTitleScreen(resumeData.profile);
-  onOverlayButton("start-game-btn", startGame);
+  onOverlayButton("start-game-btn", () => {
+    unlockAudio();
+    startGame();
+  });
 }
 
 function openCheatConsole() {
@@ -284,8 +397,10 @@ function update(dt) {
           clearOverlay();
           game.state = game.bossArena.defeated ? "victory" : "bossFight";
           if (game.bossArena.defeated) {
+            playBgm("victory");
             showVictory(resumeData.profile);
             onOverlayButton("restart-btn", () => {
+              unlockAudio();
               game.coins = 0;
               game.lives = 3;
               setupTitle();
