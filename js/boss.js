@@ -27,14 +27,22 @@ export function updateBossArena({
   fireballs,
   onPhaseCleared,
   onBossDefeated,
+  now = performance.now(),
 }) {
   if (arena.defeated) return;
 
   arena.x += Math.sin(performance.now() * 0.001) * 0.6;
 
-  if (rectsOverlap(player, arena) && player.vy > 40) {
-    arena.health -= 1;
-    player.vy = -280;
+  if (rectsOverlap(player, arena)) {
+    if (player.isInvincible) {
+      if (now >= player.bossTouchCooldownUntil) {
+        arena.health -= 1;
+        player.bossTouchCooldownUntil = now + 180;
+      }
+    } else if (player.vy > 40) {
+      arena.health -= 1;
+      player.vy = -280;
+    }
   }
 
   for (let i = fireballs.length - 1; i >= 0; i -= 1) {

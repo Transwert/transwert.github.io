@@ -22,6 +22,10 @@ import {
   showProjectPopup,
   showSkillPhasePopup,
   showVictory,
+  showCheatConsole,
+  hideCheatConsole,
+  setCheatConsoleStatus,
+  bindCheatSubmit,
   clearOverlay,
   onOverlayButton,
 } from "./ui.js";
@@ -44,12 +48,17 @@ const game = {
   experienceYears: "4+",
   worldLabel: "0-0",
   bossArena: null,
+  cheatOpen: false,
+  cheatActive: false,
+  cheatCommand: "",
+  cheatMessage: "",
 };
 
 function loadLevel(index) {
   game.levelIndex = index;
   game.level = structuredClone(allLevels[index]);
   game.player = createPlayer(64, 350);
+  game.player.isInvincible = game.cheatActive;
   game.fireballs = [];
   game.camera = new Camera(gameConfig.width, game.level.width);
   game.worldLabel = game.level.world;
@@ -78,6 +87,7 @@ function startBoss() {
     flag: null,
   };
   game.player = createPlayer(70, 350);
+  game.player.isInvincible = game.cheatActive;
   game.fireballs = [];
   game.camera = new Camera(gameConfig.width, game.level.width);
   game.worldLabel = "BOSS";
@@ -112,6 +122,49 @@ function setupTitle() {
   onOverlayButton("start-game-btn", startGame);
 }
 
+function openCheatConsole() {
+  game.cheatOpen = true;
+  showCheatConsole(game.cheatCommand);
+  setCheatConsoleStatus(
+    game.cheatMessage || "Type 'escape' and press Enter for invincibility.",
+  );
+  bindCheatSubmit((command) => {
+    if (command === "__close__") {
+      closeCheatConsole();
+      return;
+    }
+    handleCheatCommand(command);
+  });
+}
+
+function closeCheatConsole() {
+  game.cheatOpen = false;
+  hideCheatConsole();
+}
+
+function toggleCheatConsole() {
+  if (game.cheatOpen) closeCheatConsole();
+  else openCheatConsole();
+}
+
+function handleCheatCommand(rawCommand) {
+  const command = rawCommand.trim().toLowerCase();
+  game.cheatCommand = command;
+
+  if (command === "escape") {
+    game.cheatActive = true;
+    game.cheatMessage = "Invincibility ON. Touch enemies and boss to defeat.";
+    if (game.player) game.player.isInvincible = true;
+  } else if (command === "off" || command === "normal") {
+    game.cheatActive = false;
+    game.cheatMessage = "Invincibility OFF.";
+    if (game.player) game.player.isInvincible = false;
+  } else {
+    game.cheatMessage = `Unknown command: ${command || "(empty)"}`;
+  }
+  setCheatConsoleStatus(game.cheatMessage);
+}
+
 function restartFromCurrentStage() {
   game.lives = 3;
   game.fireballs = [];
@@ -142,6 +195,17 @@ function onPlayerHit() {
 }
 
 function update(dt) {
+  if (input.consumeCheatToggle()) {
+    toggleCheatConsole();
+  }
+  if (game.cheatOpen) {
+    return;
+  }
+  const now = performance.now();
+  if (game.player) {
+    game.player.isInvincible = game.cheatActive;
+  }
+
   if (game.state === "title") {
     if (input.consumeStart()) startGame();
     return;
@@ -161,7 +225,7 @@ function update(dt) {
     game.level.platforms,
     dt,
     game.fireballs,
-    performance.now(),
+    now,
   );
   updateFireballs(game.fireballs, dt, game.level.width);
 
@@ -217,6 +281,7 @@ function update(dt) {
         });
       },
       onBossDefeated: () => {},
+      now,
     });
   }
 
@@ -249,7 +314,14 @@ function render() {
     drawFireball(ctx, fireball, game.camera.x);
   }
   if (game.level.flag) drawFlag(ctx, game.level.flag, game.camera.x);
-  drawPlayer(ctx, game.player.x - game.camera.x, game.player.y, game.player.dir, game.player.frame);
+  drawPlayer(
+    ctx,
+    game.player.x - game.camera.x,
+    game.player.y,
+    game.player.dir,
+    game.player.frame,
+    { invincible: game.player.isInvincible, timeMs: performance.now() },
+  );
 
   drawHud(ctx, {
     worldLabel: game.worldLabel,

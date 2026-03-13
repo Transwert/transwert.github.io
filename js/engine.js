@@ -10,6 +10,7 @@ export function rectsOverlap(a, b) {
 export class InputManager {
   constructor(canvas) {
     this.keys = new Set();
+    this.cheatToggleRequested = false;
     this.actions = {
       left: false,
       right: false,
@@ -23,6 +24,11 @@ export class InputManager {
 
   _bindKeyboard() {
     window.addEventListener("keydown", (event) => {
+      if (event.code === "Backquote") {
+        this.cheatToggleRequested = true;
+        event.preventDefault();
+        return;
+      }
       this.keys.add(event.code);
       this._syncActions();
       if (
@@ -72,6 +78,20 @@ export class InputManager {
   }
 
   _syncActions() {
+    const active = document.activeElement;
+    const isTyping =
+      !!active &&
+      (active.tagName === "INPUT" ||
+        active.tagName === "TEXTAREA" ||
+        active.isContentEditable);
+    if (isTyping) {
+      this.actions.left = false;
+      this.actions.right = false;
+      this.actions.jump = false;
+      this.actions.shoot = false;
+      this.actions.start = false;
+      return;
+    }
     this.actions.left = this.keys.has("ArrowLeft") || this.keys.has("KeyA");
     this.actions.right = this.keys.has("ArrowRight") || this.keys.has("KeyD");
     this.actions.jump = this.keys.has("ArrowUp") || this.keys.has("KeyW");
@@ -83,6 +103,12 @@ export class InputManager {
     if (!this.actions.start) return false;
     this.actions.start = false;
     this.keys.delete("Enter");
+    return true;
+  }
+
+  consumeCheatToggle() {
+    if (!this.cheatToggleRequested) return false;
+    this.cheatToggleRequested = false;
     return true;
   }
 }

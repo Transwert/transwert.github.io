@@ -38,6 +38,11 @@ export function handleEnemyInteractions({
     if (!enemy.active) continue;
 
     if (rectsOverlap(player, enemy)) {
+      if (player.isInvincible) {
+        enemy.active = false;
+        onEnemyDefeated(enemy.project);
+        continue;
+      }
       const isStomp = player.vy > 30 && player.y + player.h - 8 <= enemy.y + 4;
       if (isStomp) {
         enemy.active = false;

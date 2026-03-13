@@ -42,13 +42,27 @@ const bossPattern = [
   "..yy....yy..",
 ];
 
-export function drawPlayer(ctx, x, y, dir = 1, frame = 0) {
+export function drawPlayer(ctx, x, y, dir = 1, frame = 0, options = {}) {
+  const { invincible = false, timeMs = 0 } = options;
   const palette = {
     s: "#2e2a5e",
     h: "#f0d2b0",
     f: "#5b8ee3",
     b: "#2d5aa6",
   };
+  if (invincible) {
+    const hue = (timeMs * 0.18) % 360;
+    const pulse = 1 + Math.sin(timeMs * 0.018) * 0.08;
+    const glowW = 40 * pulse;
+    const glowH = 34 * pulse;
+    ctx.save();
+    ctx.strokeStyle = `hsla(${hue}, 90%, 60%, 0.9)`;
+    ctx.lineWidth = 4;
+    ctx.shadowColor = `hsla(${(hue + 45) % 360}, 95%, 60%, 0.85)`;
+    ctx.shadowBlur = 14;
+    ctx.strokeRect(x - 4, y - 4, glowW, glowH);
+    ctx.restore();
+  }
   ctx.save();
   if (dir < 0) {
     ctx.translate(x + 32, y);

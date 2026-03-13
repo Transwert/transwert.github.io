@@ -15,6 +15,8 @@ export function createPlayer(x, y) {
     jumpHoldFrames: 0,
     frame: 0,
     alive: true,
+    isInvincible: false,
+    bossTouchCooldownUntil: 0,
   };
 }
 

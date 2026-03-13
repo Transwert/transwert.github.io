@@ -36,6 +36,53 @@ body {
   padding: 20px;
 }
 
+.cheat-console {
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(560px, 92%);
+  z-index: 50;
+  pointer-events: auto;
+}
+
+.cheat-console.hidden {
+  display: none;
+}
+
+.cheat-box {
+  background: #070b15f5;
+  border: 2px solid #9cd0ff;
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0 0 0 2px #00000055;
+}
+
+.cheat-box label {
+  display: block;
+  font-size: 10px;
+  margin-bottom: 8px;
+  color: #b3dbff;
+}
+
+.cheat-box input {
+  width: 100%;
+  border: 2px solid #4a7aba;
+  background: #0f1930;
+  color: #ffffff;
+  padding: 8px;
+  font-family: inherit;
+  font-size: 10px;
+  outline: none;
+}
+
+.cheat-hint {
+  margin-top: 8px;
+  font-size: 9px;
+  color: #d2ebff;
+  min-height: 1.2em;
+}
+
 .panel {
   pointer-events: auto;
   width: min(700px, 90%);

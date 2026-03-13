@@ -4,6 +4,56 @@ function setOverlayHtml(html) {
   panel.innerHTML = html;
 }
 
+function getCheatConsole() {
+  return document.getElementById("cheat-console");
+}
+
+export function showCheatConsole(initialText = "") {
+  const shell = getCheatConsole();
+  if (!shell) return;
+  shell.classList.remove("hidden");
+  shell.innerHTML = `
+    <div class="cheat-box">
+      <label for="cheat-input">Cheat Console (~)</label>
+      <input id="cheat-input" type="text" autocomplete="off" spellcheck="false" />
+      <div id="cheat-status" class="cheat-hint">Type a command and press Enter.</div>
+    </div>
+  `;
+  const input = document.getElementById("cheat-input");
+  if (!input) return;
+  input.value = initialText;
+  input.focus();
+  input.select();
+}
+
+export function hideCheatConsole() {
+  const shell = getCheatConsole();
+  if (!shell) return;
+  shell.classList.add("hidden");
+  shell.innerHTML = "";
+}
+
+export function setCheatConsoleStatus(message) {
+  const status = document.getElementById("cheat-status");
+  if (!status) return;
+  status.textContent = message;
+}
+
+export function bindCheatSubmit(onSubmit) {
+  const input = document.getElementById("cheat-input");
+  if (!input) return;
+  input.onkeydown = (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      onSubmit(input.value);
+    }
+    if (event.key === "Escape") {
+      event.preventDefault();
+      onSubmit("__close__");
+    }
+  };
+}
+
 export function drawHud(ctx, game) {
   ctx.fillStyle = "#111111aa";
   ctx.fillRect(0, 0, 800, 44);
